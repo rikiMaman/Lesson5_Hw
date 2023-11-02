@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .div {
+            border: 3px solid black
+        }
+    </style>
+</head>
+<input>
+<h1>Missles</h1>
+<input type="button" onclick="get()" value="get">
+<input type="button" onclick="GetCities()" value="GetCities">
+<input type="button" onclick="Post()" value="Post">
+<input type="button" onclick="GetDataByCity()" value="GetDataByCity">
+
+<div> <input type="text" id="patriotmissile" placeholder="patriotmissile">
+    <input type="text" id="city1" placeholder="city">
+    <input type="date" id="date" placeholder="date">
+    <input type="date" id="endDate" placeholder="endDate">
+    <input type="text" id="location" placeholder="location">
+    <input type="text" id="misleStart" placeholder="misleStart">
+</div>
+<div id="result"></div>
+<script>
+    function get() {
+        fetch("http://localhost:5104/Missle").then(Response => Response.json()).then((json) => {
+            console.log("json: ", json);
+            for (let i = 0; i < Object.keys(json).length; i++) {
+                let d = document.createElement("div");
+                d.setAttribute("class", "d")
+                p1 = document.createElement("p")
+                p2 = document.createElement("p");
+                p3 = document.createElement("p");
+                p4 = document.createElement("p");
+                p5 = document.createElement("p")
+                p6 = document.createElement("p")
+                p1.textContent = "patriotmissile: " + json[i].patriotmissile
+
+                p2.textContent = "location: " + json[i].location.location
+                p3.textContent = "city: " + json[i].location.city
+                p4.textContent = "date:" + json[i].location.date
+                p5.textContent = "endDate: " + json[i].location.endDate
+               
+                p6.textContent = "misleStart: " + json[i].location.misleStart
+               
+                d.appendChild(p1)
+                d.appendChild(p2)
+                d.appendChild(p3)
+                d.appendChild(p4)
+                d.appendChild(p5)
+                d.appendChild(p6)
+                document.getElementById("result").appendChild(d)
+            }
+        })
+    }
+    function GetCities() {
+        let d = document.createElement("div");
+        fetch("http://localhost:5104/Missle").then(Response => Response.json()).then((json) => {
+            console.log("json: ", json);
+            for (let i = 0; i < json.length; i++) {
+                d.setAttribute("class", "d")
+                p1 = document.createElement("p")
+                p1.textContent = "city: " + json[i].location.city
+                d.appendChild(p1)
+            }
+            document.getElementById("result").appendChild(d)
+        })
+    }
+    function Post() {
+        let patriotmissile = document.getElementById("patriotmissile").value;
+        let location = document.getElementById("location").value;
+        let city = document.getElementById("city1").value;
+        let date = document.getElementById("date").value;
+        let endDate = document.getElementById("endDate").value;
+        let misleStart = document.getElementById("misleStart").value;
+        Missle = {
+            "patriotmissile": patriotmissile, "location": { "city": city, "date": date, "endDate": endDate, "location": location, "misleStart": misleStart }
+
+        }
+        console.log(JSON.stringify(Missle))
+        fetch("http://localhost:5104/Missle"), method = Post, body = JSON.stringify(Missle).then(Response => Response.json()).then((json) => { })
+    }
+    function GetDataByCity() {
+        let city = document.getElementById("city1").value;
+        let d = document.createElement("div");
+        fetch("http://localhost:5104/Missle/GetDataByCity?city="+city).then(Response => Response.json()).then((json) => {
+            for (let i = 0; i < Object.keys(json).length; i++) {
+                let d = document.createElement("div");
+                d.setAttribute("class", "d")
+                p1 = document.createElement("p")
+                p2 = document.createElement("p");
+                p3 = document.createElement("p");
+                p4 = document.createElement("p");
+                p5 = document.createElement("p")
+                p6 = document.createElement("p")
+
+                // p1.textContent = "patriotmissile: " + json[i].patriotmissile
+                p2.textContent = "location: " + json[i].location.date
+                p3.textContent = "city: " + json[i].location.city
+                p4.textContent = "date:" + json[i].location.date
+                p5.textContent = "endDate: " + json[i].location.misleStart
+                p6.textContent = "misleStart: " + json[i].location.misleStart
+                d.appendChild(p1);
+                d.appendChild(p2);
+                d.appendChild(p3);
+                d.appendChild(p4);
+                d.appendChild(p5);
+                d.appendChild(p6);
+                // for (let index = 1; index <= 6; index++) {
+                //     d.appendChild(p + index)
+                // }
+                document.getElementById("result").appendChild(d)
+            }
+
+        })
+    }
+
+</script>
+</body>
